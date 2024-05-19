@@ -24,7 +24,7 @@ exports.handler = async (event, context) => {
   const db = await connectToDatabase();
 
   const alunos = await db.collection("alunos");
-  const users = await db.collection("alunos");
+  const users = await db.collection("users");
   
   const body = JSON.parse(event.body);
   
