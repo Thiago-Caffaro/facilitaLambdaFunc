@@ -33,25 +33,16 @@ exports.handler = async (event, context) => {
   const aluno = await alunos.findOne({ matricula: matricula});
   const user = await users.findOne({ matricula: matricula});
   
-  if (aluno) {
+  if (aluno && user) {
     return {
         statusCode: 200,
         body: JSON.stringify({
             success: true,
-            message: 'Aluno encontrado!',
-            alunoData: {aluno}
+            message: 'Aluno e Usuário encontrado!',
+            alunoData: {aluno},
+            user: {user}
         })
     };
-  } else if (aluno && user){
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-          success: true,
-          message: 'Aluno e Usuário encontrado!',
-          aluno: {aluno},
-          user: {user}
-      })
-    }
   } else {
     return {
         statusCode: 200,
