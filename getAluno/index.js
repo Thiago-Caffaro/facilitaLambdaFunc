@@ -24,21 +24,22 @@ exports.handler = async (event, context) => {
   const db = await connectToDatabase();
 
   const alunos = await db.collection("alunos");
-  const users = await db.collection("users");
-
-  const matricula = event.matricula;
+  const users = await db.collection("alunos");
+  
+  const body = JSON.parse(event.body);
+  
+  const matricula = Math.floor(parseInt(body.matricula));
 
   const aluno = await alunos.findOne({ matricula: matricula});
   const user = await users.findOne({ matricula: matricula});
-
+  
   if (aluno) {
     return {
         statusCode: 200,
         body: JSON.stringify({
             success: true,
             message: 'Aluno encontrado!',
-            aluno: {aluno},
-            
+            alunoData: {aluno}
         })
     };
   } else if (aluno && user){
@@ -50,14 +51,14 @@ exports.handler = async (event, context) => {
           aluno: {aluno},
           user: {user}
       })
-  };
+    }
   } else {
     return {
         statusCode: 200,
         body: JSON.stringify({
             success: false,
-            message: 'Aluno e usuário não encontrado!',
-            aluno: null
+            message: 'Aluno não encontrado!',
+            alunoData: null
         })
     };
   }
