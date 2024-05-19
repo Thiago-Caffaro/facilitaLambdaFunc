@@ -23,30 +23,41 @@ exports.handler = async (event, context) => {
 
   const db = await connectToDatabase();
 
-  const users = await db.collection("alunos");
-  
-  const body = JSON.parse(event.body);
-  
-  const matricula = Math.floor(parseInt(body.matricula));
+  const alunos = await db.collection("alunos");
+  const users = await db.collection("users");
 
-  const aluno = await users.findOne({ matricula: matricula});
-  
+  const matricula = event.matricula;
+
+  const aluno = await alunos.findOne({ matricula: matricula});
+  const user = await users.findOne({ matricula: matricula});
+
   if (aluno) {
     return {
         statusCode: 200,
         body: JSON.stringify({
             success: true,
             message: 'Aluno encontrado!',
-            alunoData: {aluno}
+            aluno: {aluno},
+            
         })
     };
+  } else if (aluno && user){
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+          success: true,
+          message: 'Aluno e Usuário encontrado!',
+          aluno: {aluno},
+          user: {user}
+      })
+  };
   } else {
     return {
         statusCode: 200,
         body: JSON.stringify({
             success: false,
-            message: 'Aluno não encontrado!',
-            alunoData: null
+            message: 'Aluno e usuário não encontrado!',
+            aluno: null
         })
     };
   }
