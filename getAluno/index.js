@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
             success: true,
             message: 'Aluno e Usuário encontrado!',
             alunoData: {aluno},
-            user: {user}
+            userData: {user}
         })
     };
   } else {
